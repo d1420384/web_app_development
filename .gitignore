@@ -1,0 +1,20 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.local
+
+# Database
+instance/*
+!instance/.keep
+*.sqlite3
+*.db

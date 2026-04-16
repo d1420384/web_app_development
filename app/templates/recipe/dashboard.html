@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+    <h2 class="fw-bold m-0">我的收藏夾 📖</h2>
+    <a href="{{ url_for('recipe.create') }}" class="btn btn-primary">+ 新增食譜</a>
+</div>
+
+{% if recipes %}
+<div class="table-responsive bg-white rounded shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th scope="col" width="50%">食譜標題</th>
+                <th scope="col" width="20%">建立時間</th>
+                <th scope="col" width="10%">狀態</th>
+                <th scope="col" class="text-end" width="20%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+            <tr>
+                <td class="fw-bold">
+                    <a href="{{ url_for('recipe.detail', id=recipe.id) }}" class="text-decoration-none text-dark">
+                        {{ recipe.title }}
+                    </a>
+                </td>
+                <td class="text-muted small">{{ recipe.created_at[:10] }}</td>
+                <td>
+                    {% if recipe.is_public == 1 %}
+                        <span class="badge bg-success">已公開</span>
+                    {% else %}
+                        <span class="badge bg-secondary">私密</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <!-- 使用表單來打 POST API (切換狀態) -->
+                    <form action="{{ url_for('recipe.toggle_visibility', id=recipe.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-info" title="切換權限">
+                            {% if recipe.is_public == 1 %}隱藏{% else %}公開{% endif %}
+                        </button>
+                    </form>
+                    
+                    <a href="{{ url_for('recipe.edit', id=recipe.id) }}" class="btn btn-sm btn-outline-primary">編輯</a>
+                    
+                    <!-- 使用表單來打 POST API (刪除) -->
+                    <form action="{{ url_for('recipe.delete', id=recipe.id) }}" method="POST" class="d-inline" onsubmit="return confirm('確定要刪除這份食譜嗎？此操作無法還原。');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5">
+    <h4 class="text-muted mb-3">你還沒有收藏任何食譜 😢</h4>
+    <a href="{{ url_for('recipe.create') }}" class="btn btn-lg btn-primary">馬上建立你的第一份食譜！</a>
+</div>
+{% endif %}
+
+{% endblock %}

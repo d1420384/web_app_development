@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h2 class="fw-bold">
+            {% if search_query %}
+                "{{ search_query }}" 的搜尋結果
+            {% else %}
+                熱門公開食譜牆
+            {% endif %}
+        </h2>
+        <p class="text-muted">探索大家分享的美味料理靈感！</p>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    {% if recipes %}
+        {% for recipe in recipes %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                {% if recipe.image_url %}
+                    <img src="{{ recipe.image_url }}" class="card-img-top" alt="{{ recipe.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 200px;">
+                        <span>📷 無圖片</span>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ recipe.title }}</h5>
+                    <p class="card-text text-truncate text-muted small">{{ recipe.ingredients }}</p>
+                </div>
+                <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+                    <small class="text-muted">發布於 {{ recipe.created_at[:10] }}</small>
+                    <a href="{{ url_for('recipe.detail', id=recipe.id) }}" class="btn btn-sm btn-primary">查看作法</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 py-5 text-center">
+            <h4 class="text-muted">目前這裡空空如也 🍽️</h4>
+            <p>沒有找到相關的公開食譜。</p>
+            {% if search_query %}
+                <a href="{{ url_for('recipe.index') }}" class="btn btn-outline-secondary mt-2">返回所有食譜</a>
+            {% else %}
+                <a href="{{ url_for('recipe.create') }}" class="btn btn-primary mt-2">成為第一個分享的人！</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

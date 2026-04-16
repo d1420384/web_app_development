@@ -1,0 +1,2 @@
+# Instance Directory
+This directory is purposefully gitignored but holds runtime files like the SQLite database.
